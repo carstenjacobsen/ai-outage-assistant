@@ -3,7 +3,7 @@ Demo application built with Twilio ConversationRelay and OpenAI
 
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Twilio] <--> B[Webhook] <--> C[Application] <--> D[WebSocket] <--> E[OpenAI];
 ```
 
