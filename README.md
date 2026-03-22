@@ -1,5 +1,13 @@
 # AI Outage Assistant
-Demo application built with Twilio ConversationRelay and OpenAI
+This project is a demo application built with Twilio ConversationRelay and OpenAI. Imagine an Internet provider called XYZ Internet has a support phone number where it's customers can call in to get outage information or get help to troubleshoot their home Internet.
+
+
+
+
+## Prerequisites
+The application 
+
+
 
 
 ```mermaid
