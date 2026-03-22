@@ -1,6 +1,6 @@
 import Fastify from "fastify";
-import fastifyWs from "@fastify/websocket";
 import fastifyFormBody from "@fastify/formbody";
+import { WebSocketServer } from "ws";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 
@@ -9,8 +9,9 @@ import users from "./users.json" with { type: "json" };
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
-const DOMAIN = process.env.NGROK_URL;
-const WS_URL = `wss://${DOMAIN}/ws`;
+const WS_PORT = process.env.WS_PORT || 8081;
+const DOMAIN = process.env.DOMAIN;
+const WS_URL = `wss://${DOMAIN}`;
 const WELCOME_GREETING =
   "I am X Y Z Internet's Status voice assistant. Say 'Status' for current outage information, or 'Troubleshoot' for help with your connection.";
 const SYSTEM_PROMPT =
@@ -28,7 +29,6 @@ async function aiResponse(messages) {
   });
   return completion.choices[0].message.content;
 }
-
 
 async function handlePrompt(prompt, ws, session) {
   const normalized = prompt.toLowerCase().replace(/[^a-z]/g, "");
@@ -65,18 +65,50 @@ async function handlePrompt(prompt, ws, session) {
   session.messages.push({ role: "assistant", content: response });
   ws.send(JSON.stringify({ type: "text", token: response, last: true }));
   console.log("Sent response:", response);
-  console.log("Current sessions:", session);
 }
 
+// ── Standalone WebSocket server ──────────────────────────────────────────────
+const wss = new WebSocketServer({ port: WS_PORT });
+console.log(`WebSocket server running on ws://localhost:${WS_PORT}`);
 
+wss.on("connection", (ws) => {
+  console.log("New WebSocket connection established.");
 
+  ws.on("message", async (data) => {
+    const message = JSON.parse(data);
 
+    switch (message.type) {
+      case "setup":
+        const callSid = message.callSid;
+        console.log("Setup for call:", callSid);
+        ws.callSid = callSid;
+        sessions.set(callSid, { messages: [{ role: "system", content: SYSTEM_PROMPT }], mode: null });
+        break;
+      case "prompt":
+        console.log("Processing prompt:", message.voicePrompt);
+        await handlePrompt(message.voicePrompt, ws, sessions.get(ws.callSid));
+        break;
+      case "interrupt":
+        console.log("Handling interruption.");
+        break;
+      default:
+        console.warn("Unknown message type received:", message.type);
+        break;
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("WebSocket connection closed.");
+    sessions.delete(ws.callSid);
+  });
+});
+
+// ── HTTP server (TwiML endpoint) ─────────────────────────────────────────────
 const fastify = Fastify();
-fastify.register(fastifyWs);
 fastify.register(fastifyFormBody);
+
 fastify.all("/twiml", async (request, reply) => {
   console.log("Received call, responding with TwiML.");
-  console.log("Request body:", request.query.From);
   console.log("TwiML response will connect to WebSocket at:", WS_URL);
 
   const caller = request.query.From || "unknown";
@@ -84,8 +116,6 @@ fastify.all("/twiml", async (request, reply) => {
   const user = users.find((u) => u.phone === caller);
   const welcomeName = user ? user.firstname : "there!";
   const personalizedGreeting = `Hi ${welcomeName}! ${WELCOME_GREETING}`;
-
-
 
   reply.type("text/xml").send(
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -97,63 +127,10 @@ fastify.all("/twiml", async (request, reply) => {
   );
 });
 
-fastify.register(async function (fastify) {
-  fastify.get("/ws", { websocket: true }, (ws, req) => {
-    ws.on("message", async (data) => {
-      const message = JSON.parse(data);
-
-      switch (message.type) {
-        case "setup":
-          const callSid = message.callSid;
-          console.log("Setup for call:", callSid);
-          ws.callSid = callSid;
-          sessions.set(callSid, { messages: [{ role: "system", content: SYSTEM_PROMPT }], mode: null });
-          break;
-        case "prompt":
-          console.log("Processing prompt:", message.voicePrompt);
-          await handlePrompt(message.voicePrompt, ws, sessions.get(ws.callSid));
-          break;
-        case "interrupt":
-          console.log("Handling interruption.");
-          break;
-        default:
-          console.warn("Unknown message type received:", message.type);
-          break;
-      }
-    });
-
-    ws.on("close", () => {
-      console.log("WebSocket connection closed");
-      sessions.delete(ws.callSid);
-    });
-  });
-});
-
 try {
   fastify.listen({ port: PORT });
-  console.log(
-    `Server running at http://localhost:${PORT} and wss://${DOMAIN}/ws`
-  );
+  console.log(`HTTP server running at http://localhost:${PORT}`);
 } catch (err) {
   fastify.log.error(err);
   process.exit(1);
 }
-
-
-
-/*
-Idea: Outage Assistant
-
-Menu:
-1. Check Status
-2. Troubleshoot
-
-
-
-
-
-
-*/
-
-
-
