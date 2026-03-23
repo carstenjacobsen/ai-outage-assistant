@@ -5,8 +5,12 @@ This project is a demo application built with Twilio ConversationRelay and OpenA
 
 
 ## Prerequisites
-The application 
+The application is based on Node.js and running the latest version is encouraged, since the application has not been tested with version earlier than v23. Get  
+Node.js [here](https://nodejs.org).
 
+The application needs the following services:
+
+* 
 
 
 
