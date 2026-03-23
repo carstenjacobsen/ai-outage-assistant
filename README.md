@@ -10,9 +10,10 @@ The application is based on Node.js and running the latest version is encouraged
 The application needs the following services:
 
 * **Twilio Account** - sign up for a free trial [here](https://www.twilio.com/try-twilio)
-* **Twilio Number (with Voice Capabilities)** - see step-by-step instructions [here](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
+* **Twilio Number (with Voice Capabilities)** - follow the guide [here](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
 * **OpenAI Platform Account** - setup an account and get an API key [here](https://platform.openai.com/api-keys)
 
+The application is not designed to be used in production, so for testing locally the Websocket is exposed to the Twilio services by using LocalTunnel. This is a free, easy-to-use bridge. Installation and configuration is described below.
 
 
 ```mermaid
