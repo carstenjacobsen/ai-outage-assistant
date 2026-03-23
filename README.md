@@ -5,12 +5,13 @@ This project is a demo application built with Twilio ConversationRelay and OpenA
 
 
 ## Prerequisites
-The application is based on Node.js and running the latest version is encouraged, since the application has not been tested with version earlier than v23. Get  
-Node.js [here](https://nodejs.org).
+The application is based on Node.js and running the latest version is encouraged, since the application has not been tested with version earlier than v23. Get Node.js [here](https://nodejs.org). 
 
 The application needs the following services:
 
-* 
+* **Twilio Account** - sign up for a free trial [here](https://www.twilio.com/try-twilio)
+* **Twilio Number (with Voice Capabilities)** - see step-by-step instructions [here](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
+* **OpenAI Platform Account** - setup an account and get an API key [here](https://platform.openai.com/api-keys)
 
 
 
