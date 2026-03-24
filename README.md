@@ -29,6 +29,46 @@ The app is not designed to be used in production, so for testing locally the Web
 ### handlePrompt(prompt, ws, session)
 sdfasfasfds
 
+```node
+async function handlePrompt(prompt, ws, session) {
+  const normalized = prompt.toLowerCase().replace(/[^a-z]/g, "");
+
+  if (normalized === "status") {
+    const response = "No outages are currently detected. Say 'Troubleshoot' if you are experiencing connection issues and would like help diagnosing the problem.";
+    ws.send(JSON.stringify({ type: "text", token: response, last: true }));
+    console.log("Sent status response:", response);
+    return;
+  }
+
+  if (normalized === "troubleshoot") {
+    session.mode = "troubleshoot";
+    const response = "Please describe your connection problem.";
+    ws.send(JSON.stringify({ type: "text", token: response, last: true }));
+    console.log("Prompted user for troubleshoot description.");
+    return;
+  }
+
+  if (session.mode === "troubleshoot") {
+    session.mode = null;
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT + " " + TROUBLESHOOT_PROMPT },
+      { role: "user", content: prompt },
+    ];
+    const response = await aiResponse(messages);
+    ws.send(JSON.stringify({ type: "text", token: response, last: true }));
+    console.log("Sent troubleshoot AI response:", response);
+    return;
+  }
+
+  session.messages.push({ role: "user", content: prompt });
+  const response = await aiResponse(session.messages);
+  session.messages.push({ role: "assistant", content: response });
+  ws.send(JSON.stringify({ type: "text", token: response, last: true }));
+  console.log("Sent response:", response);
+  console.log("Current sessions:", session);
+}
+```
+
 
 
 
