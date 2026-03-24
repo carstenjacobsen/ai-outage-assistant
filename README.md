@@ -48,7 +48,7 @@ async function aiResponse(messages) {
 
 
 ### async function handlePrompt(prompt, ws, session)
-sdfasfasfds
+The function `handlePrompt()` handles four different prompt cases. It handles the case where the user says "Status", the case where the user says "Troubleshoot", the case where user said "Troubleshoot" in the previous prompt, and now explains what the issue is, and finally `handlePrompt()` handles undefined cases.
 
 ```node
 async function handlePrompt(prompt, ws, session) {
