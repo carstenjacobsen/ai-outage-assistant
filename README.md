@@ -4,6 +4,12 @@ This project is a demo app built with Twilio ConversationRelay and OpenAI. Imagi
 ### Voice Commands
 This app has two different types of voice commands. The app has a very basic menu that will either let the caller get outage status (say "Status") or ask for help troubleshooting issues (say "Troubleshoot"). When the caller says "Troubleshoot" the user will be asked to describe the problem, which then is sent to OpenAI to get an answer.
 
+Examples of voice commands:
+
+* "Status" - this command will return the current status and report on any outages
+* "Troubleshoot" - the assistant will reply with the question: _"Please describe your connection problem."_
+* * "The router is blkinking orange"
+
 
 ## Prerequisites
 The app is based on Node.js and running the latest version is encouraged, since the app has not been tested with version earlier than v23. Get Node.js [here](https://nodejs.org). 
