@@ -27,13 +27,12 @@ The app is not designed to be used in production, so for testing locally the Web
 
 
 ## Explaining the Code
-The app has four primary parts and the following is a high level explanation of those four:
+The app has four primary parts and the following is a high level explanation of each of them:
 
 * `/twiml` endpoint
 * `/ws` endpoint
 * handlePrompt()
 * aiResponse()
-* 
 
 ### `/twiml` endpoint
 In the Twilio Phone Number service configuration, a webhook can be setup to be invoked when a phone call comes in. The webhook must be configured to invoke the `/twiml` endpoint of the app, and the endpoint is expected to return a response in the Twilio Markup Language. 
@@ -99,21 +98,6 @@ fastify.register(async function (fastify) {
 
 The user's voice prompts are handled by the function `handlePrompt()`. Besides the prompt message type, the websocket logic also handles interruptions (the caller interrupts) and the initial setup of the websocket session. The session map `sessions` holds information about messages sent and received for each caller, so caller messages and information is not mixed up if there are multiple simultaneous active websocket sessions. 
 
-### async function aiResponse(messages)
-
-
-```node
-import OpenAI from "openai";
-
-async function aiResponse(messages) {
-  let completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: messages,
-  });
-  return completion.choices[0].message.content;
-}
-```
-
 
 
 
@@ -122,7 +106,7 @@ async function aiResponse(messages) {
 
 
 ### async function handlePrompt(prompt, ws, session)
-The function `handlePrompt()` handles four different prompt cases. It handles the case where the user says "Status", the case where the user says "Troubleshoot", the case where user said "Troubleshoot" in the previous prompt, and now explains what the issue is, and finally `handlePrompt()` handles undefined cases.
+The function `handlePrompt()` handles four different prompt cases. It handles the case where the user says "Status", the case where the user says "Troubleshoot", the case where user said "Troubleshoot" in the previous prompt, and now explains what the issue is, and finally `handlePrompt()` handles undefined cases (catch-all).
 
 ```node
 async function handlePrompt(prompt, ws, session) {
@@ -159,18 +143,31 @@ async function handlePrompt(prompt, ws, session) {
 }
 ```
 
+### async function aiResponse(messages)
+The function `handlePrompt()` sends user prompts to OpenAI for troubleshooting advice based on the user's input. All communication with OpenAI is handled by the OpenAI SDK, and requires very little configuration.  
 
-###
+```node
+import OpenAI from "openai";
 
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+async function aiResponse(messages) {
+  let completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: messages,
+  });
+  return completion.choices[0].message.content;
+}
+```
 
 ## Run the App
 
-* npm install
-* .env
-* localtunnel
-* run node script
+### Install Dependencies
+First clone this repository, and then install all dependencies:
 
+```bash
+npm install
+```
 
 ### Setup Localtunnel
 Localtunnel allows you to easily share a web service on your local development machine without having to think about DNS and firewall settings. Localtunnel will assign you a unique publicly accessible url that will proxy all requests to your locally running webserver.
@@ -186,6 +183,25 @@ Request a tunnel to your local server (the app will run on port 8080) and give i
 ```bash
 lt --port 8080 --subdomain statusassist 
 ```
+
+_Note: Be aware that Localtunnel is a free service and may not be stable. This is not a solution for production._
+
+### Modify Environment
+The app needs information about OpenAI, the public Localtunnel URL and the port number the app is running on locally:
+
+```bash
+OPENAI_API_KEY="sk-proj-xxxxxxxxxxxxxx"
+DOMAIN="statusassist.loca.lt"
+PORT=8080
+```
+
+### Start App
+That's it! Now just start the app:
+
+```bash
+node server.js
+```
+
 
 
 
