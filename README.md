@@ -25,8 +25,29 @@ The app is not designed to be used in production, so for testing locally the Web
 
 
 
+### async function aiResponse(messages)
 
-### handlePrompt(prompt, ws, session)
+
+```node
+import OpenAI from "openai";
+
+async function aiResponse(messages) {
+  let completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: messages,
+  });
+  return completion.choices[0].message.content;
+}
+```
+
+
+
+
+
+
+
+
+### async function handlePrompt(prompt, ws, session)
 sdfasfasfds
 
 ```node
