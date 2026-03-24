@@ -10,6 +10,12 @@ Examples of voice commands:
 * "Troubleshoot" - the assistant will reply with the question: _"Please describe your connection problem."_
   * "The router is blkinking orange"
 
+**Example:**
+<audio controls>
+  <source src="sample_call.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
 _Note: The app doesn't actually retrieve an outage status, since this is just a demo with a made-up use case_
 
 ## Prerequisites
