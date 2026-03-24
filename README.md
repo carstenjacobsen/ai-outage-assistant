@@ -11,6 +11,10 @@ Examples of voice commands:
   * "The router is blkinking orange"
 
 **Example:** [sample_call.mp3](https://github.com/user-attachments/files/26223680/sample_call.mp3)
+<audio controls>
+  <source src="https://github.com/user-attachments/files/26223680/sample_call.mp3" type="audio/mpeg">
+  ...
+</audio>
 
 _Note: The app doesn't actually retrieve an outage status, since this is just a demo with a made-up use case_
 
