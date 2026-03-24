@@ -36,7 +36,6 @@ async function handlePrompt(prompt, ws, session) {
   if (normalized === "status") {
     const response = "No outages are currently detected. Say 'Troubleshoot' if you are experiencing connection issues and would like help diagnosing the problem.";
     ws.send(JSON.stringify({ type: "text", token: response, last: true }));
-    console.log("Sent status response:", response);
     return;
   }
 
@@ -44,7 +43,6 @@ async function handlePrompt(prompt, ws, session) {
     session.mode = "troubleshoot";
     const response = "Please describe your connection problem.";
     ws.send(JSON.stringify({ type: "text", token: response, last: true }));
-    console.log("Prompted user for troubleshoot description.");
     return;
   }
 
@@ -56,7 +54,6 @@ async function handlePrompt(prompt, ws, session) {
     ];
     const response = await aiResponse(messages);
     ws.send(JSON.stringify({ type: "text", token: response, last: true }));
-    console.log("Sent troubleshoot AI response:", response);
     return;
   }
 
@@ -64,8 +61,6 @@ async function handlePrompt(prompt, ws, session) {
   const response = await aiResponse(session.messages);
   session.messages.push({ role: "assistant", content: response });
   ws.send(JSON.stringify({ type: "text", token: response, last: true }));
-  console.log("Sent response:", response);
-  console.log("Current sessions:", session);
 }
 ```
 
