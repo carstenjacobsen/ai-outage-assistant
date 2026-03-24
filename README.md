@@ -65,9 +65,39 @@ The response sets up ConversationRelay with the websocket URL `/ws` and the welc
 
 The welcome greeting is personalized by looking up the caller in a JSON file. If the caller's phone number is known, the caller's firstname is used in the greeting. 
 
+### `/ws` endpoint
+The app is communicating with Twilio ConversationRelay through a websocket. When the caller speaks on the phone the speach is translated into text and sent to the app through the websocket (`prompt`). Text can also be sent from the app to ConversationRelay through the websocket, the text will be translated to speach and read out loud to the caller.
 
+```node
+fastify.register(async function (fastify) {
+  fastify.get("/ws", { websocket: true }, (ws, req) => {
+    ws.on("message", async (data) => {
+      const message = JSON.parse(data);
 
+      switch (message.type) {
+        case "setup":
+          const callSid = message.callSid;
+          ws.callSid = callSid;
+          sessions.set(callSid, { messages: [{ role: "system", content: SYSTEM_PROMPT }], mode: null });
+          break;
+        case "prompt":
+          await handlePrompt(message.voicePrompt, ws, sessions.get(ws.callSid));
+          break;
+        case "interrupt":
+          break;
+        default:
+          break;
+      }
+    });
 
+    ws.on("close", () => {
+      sessions.delete(ws.callSid);
+    });
+  });
+});
+```
+
+The user's voice prompts are handled by the function `handlePrompt()`. Besides the prompt message type, the websocket logic also handles interruptions (the caller interrupts) and the initial setup of the websocket session. The session map `sessions` holds information about messages sent and received for each caller, so caller messages and information is not mixed up if there are multiple simultaneous active websocket sessions. 
 
 ### async function aiResponse(messages)
 
