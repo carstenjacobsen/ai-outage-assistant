@@ -1,7 +1,8 @@
 # AI Outage Assistant
 This project is a demo app built with Twilio ConversationRelay and OpenAI. Imagine an Internet provider called XYZ Internet has a support phone number where it's customers can call in to get outage information or get help to troubleshoot their home Internet.
 
-
+### Voice Commands
+This app has two different types of voice commands. The app has a very basic menu that will either let the caller get outage status (say "Status") or ask for help troubleshooting issues (say "Troubleshoot"). When the caller says "Troubleshoot" the user will be asked to describe the problem, which then is sent to OpenAI to get an answer.
 
 
 ## Prerequisites
@@ -20,12 +21,16 @@ The app is not designed to be used in production, so for testing locally the Web
 
 
 
-## Voice Commands
-This app has two different types of voice commands. The app has a very basic menu that will either let the caller get outage status (say "Status") or ask for help troubleshooting issues (say "Troubleshoot"). When the caller says "Troubleshoot" the user will be asked to describe the problem, which then is sent to OpenAI to get an answer.
 
 
 
 
 
+## Run the App
+
+* npm install
+* .env
+* localtunnel
+* run node script
 
 
