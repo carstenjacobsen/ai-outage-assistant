@@ -15,7 +15,7 @@ Examples of voice commands:
   <source src="https://github.com/user-attachments/files/26223680/sample_call.mp3" type="audio/mpeg">
   ...
 </audio>
-
+[![Play demo](https://img.shields.io/badge/▶-Play%20Demo-blue)]([https://example.com/demo.mp3](https://github.com/user-attachments/files/26223680/sample_call.mp3))
 _Note: The app doesn't actually retrieve an outage status, since this is just a demo with a made-up use case_
 
 ## Prerequisites
