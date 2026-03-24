@@ -10,11 +10,7 @@ Examples of voice commands:
 * "Troubleshoot" - the assistant will reply with the question: _"Please describe your connection problem."_
   * "The router is blkinking orange"
 
-**Example:**
-<audio controls>
-  <source src="https://github.com/carstenjacobsen/ai-outage-assistant/blob/main/sample_call.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+**Example:** [sample_call.mp3](https://github.com/user-attachments/files/26223680/sample_call.mp3)
 
 _Note: The app doesn't actually retrieve an outage status, since this is just a demo with a made-up use case_
 
