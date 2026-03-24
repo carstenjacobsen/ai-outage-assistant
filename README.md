@@ -12,7 +12,7 @@ Examples of voice commands:
 
 **Example:**
 <audio controls>
-  <source src="sample_call.mp3" type="audio/mpeg">
+  <source src="https://github.com/carstenjacobsen/ai-outage-assistant/blob/main/sample_call.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
