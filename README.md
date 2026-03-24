@@ -10,6 +10,7 @@ Examples of voice commands:
 * "Troubleshoot" - the assistant will reply with the question: _"Please describe your connection problem."_
   * "The router is blkinking orange"
 
+_Note: The app doesn't actually retrieve an outage status, since this is just a demo with a made-up use case_
 
 ## Prerequisites
 The app is based on Node.js and running the latest version is encouraged, since the app has not been tested with version earlier than v23. Get Node.js [here](https://nodejs.org). 
