@@ -8,7 +8,7 @@ Examples of voice commands:
 
 * "Status" - this command will return the current status and report on any outages
 * "Troubleshoot" - the assistant will reply with the question: _"Please describe your connection problem."_
-* * "The router is blkinking orange"
+ * "The router is blkinking orange"
 
 
 ## Prerequisites
