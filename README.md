@@ -36,7 +36,34 @@ The app has four primary parts and the following is a high level explanation of 
 * 
 
 ### `/twiml` endpoint
+In the Twilio Phone Number service configuration, a webhook can be setup to be invoked when a phone call comes in. The webhook must be configured to invoke the `/twiml` endpoint of the app, and the endpoint is expected to return a response in the Twilio Markup Language. 
 
+```node
+import users from "./users.json" with { type: "json" };
+
+const fastify = Fastify();
+fastify.register(fastifyWs);
+fastify.register(fastifyFormBody);
+fastify.all("/twiml", async (request, reply) => {
+  const caller = request.query.From || "unknown";
+  const user = users.find((u) => u.phone === caller);
+  const welcomeName = user ? user.firstname : "there!";
+  const personalizedGreeting = `Hi ${welcomeName}! ${WELCOME_GREETING}`;
+
+  reply.type("text/xml").send(
+    `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+      <Connect>
+        <ConversationRelay url="${WS_URL}" welcomeGreeting="${personalizedGreeting}" />
+      </Connect>
+    </Response>`
+  );
+});
+```
+
+The response sets up ConversationRelay with the websocket URL `/ws` and the welcome greeting that callers will hear when the connection is made. 
+
+The welcome greeting is personalized by looking up the caller in a JSON file. If the caller's phone number is known, the caller's firstname is used in the greeting. 
 
 
 
