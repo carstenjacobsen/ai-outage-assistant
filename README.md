@@ -23,6 +23,17 @@ The app needs the following services:
 
 The app is not designed to be used in production, so for testing locally the Websocket is exposed to the Twilio services by using LocalTunnel. This is a free, easy-to-use bridge. Installation and configuration is described below.
 
+## Explaining the Code
+The app has four primary parts and the following is a high level explanation of those four:
+
+* `/twiml` endpoint
+* `/ws` endpoint
+* handlePrompt()
+* aiResponse()
+* 
+
+
+
 
 
 ### async function aiResponse(messages)
@@ -86,7 +97,7 @@ async function handlePrompt(prompt, ws, session) {
 ```
 
 
-
+###
 
 
 
