@@ -21,7 +21,10 @@ The app needs the following services:
 * **Twilio Number (with Voice Capabilities)** - follow the guide [here](https://help.twilio.com/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
 * **OpenAI Platform Account** - setup an account and get an API key [here](https://platform.openai.com/api-keys)
 
-The app is not designed to be used in production, so for testing locally the Websocket is exposed to the Twilio services by using LocalTunnel. This is a free, easy-to-use bridge. Installation and configuration is described below.
+The app is not designed to be used in production, so for testing locally the Websocket is exposed to the Twilio services by using Localtunnel. This is a free, easy-to-use service.
+
+
+
 
 ## Explaining the Code
 The app has four primary parts and the following is a high level explanation of those four:
@@ -31,6 +34,9 @@ The app has four primary parts and the following is a high level explanation of 
 * handlePrompt()
 * aiResponse()
 * 
+
+### `/twiml` endpoint
+
 
 
 
@@ -107,5 +113,25 @@ async function handlePrompt(prompt, ws, session) {
 * .env
 * localtunnel
 * run node script
+
+
+### Setup Localtunnel
+Localtunnel allows you to easily share a web service on your local development machine without having to think about DNS and firewall settings. Localtunnel will assign you a unique publicly accessible url that will proxy all requests to your locally running webserver.
+
+Install Localtunnel globally to make it accessible anywhere:
+
+```bash
+npm install -g localtunnel
+```
+
+Request a tunnel to your local server (the app will run on port 8080) and give it a name:
+
+```bash
+lt --port 8080 --subdomain statusassist 
+```
+
+
+
+
 
 
